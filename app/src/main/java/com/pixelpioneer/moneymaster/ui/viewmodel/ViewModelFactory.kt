@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.pixelpioneer.moneymaster.data.repository.BudgetRepository
 import com.pixelpioneer.moneymaster.data.repository.CategoryRepository
 import com.pixelpioneer.moneymaster.data.repository.CoinCapRepository
+import com.pixelpioneer.moneymaster.data.repository.ReceiptScanRepository
 import com.pixelpioneer.moneymaster.data.repository.TransactionRepository
 
 class ViewModelFactory(
@@ -12,6 +13,7 @@ class ViewModelFactory(
     private val categoryRepository: CategoryRepository,
     private val budgetRepository: BudgetRepository,
     private val coinCapRepository: CoinCapRepository,
+    private val receiptScanRepository: ReceiptScanRepository,
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -37,8 +39,8 @@ class ViewModelFactory(
                 CryptoViewModel(coinCapRepository) as T
             }
 
-            modelClass.isAssignableFrom(ReceiptViewModel::class.java) -> {
-                ReceiptViewModel() as T
+            modelClass.isAssignableFrom(ReceiptScanViewModel::class.java) -> {
+                ReceiptScanViewModel(receiptScanRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

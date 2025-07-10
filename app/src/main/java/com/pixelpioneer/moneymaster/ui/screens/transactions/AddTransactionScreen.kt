@@ -325,7 +325,7 @@ fun AddTransactionScreen(
 
             Button(
                 onClick = {
-                    navController.navigate(Screen.ReceiptScanner.route)
+                     navController.navigate(Screen.ReceiptScan.route)
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

@@ -12,8 +12,8 @@ data class OcrSpaceResponse(
     val ParsedResults: List<ParsedResult>?,
     val OCRExitCode: Int,
     val IsErroredOnProcessing: Boolean,
-    val ErrorMessage: String?,
-    val ErrorDetails: String?
+    val ErrorMessage: Any?, // String oder Array
+    val ErrorDetails: Any?  // String oder Array
 )
 
 data class ParsedResult(
@@ -21,8 +21,8 @@ data class ParsedResult(
     val TextOrientation: String?,
     val FileParseExitCode: Int,
     val ParsedText: String?,
-    val ErrorMessage: String?,
-    val ErrorDetails: String?
+    val ErrorMessage: Any?, // String oder Array
+    val ErrorDetails: Any?  // String oder Array
 )
 
 data class TextOverlay(
@@ -47,11 +47,11 @@ interface OcrSpaceApiService {
     @POST("parse/image")
     suspend fun parseImage(
         @Part("apikey") apiKey: RequestBody,
-        @Part("language") language: RequestBody = "ger".toRequestBody(MultipartBody.FORM),
-        @Part("isOverlayRequired") overlay: RequestBody = "true".toRequestBody(MultipartBody.FORM),
-        @Part("detectOrientation") orientation: RequestBody = "true".toRequestBody(MultipartBody.FORM),
-        @Part("isTable") isTable: RequestBody = "true".toRequestBody(MultipartBody.FORM),
-        @Part("scale") scale: RequestBody = "true".toRequestBody(MultipartBody.FORM),
+        @Part("language") language: RequestBody,
+        @Part("isOverlayRequired") overlay: RequestBody,
+        @Part("detectOrientation") orientation: RequestBody,
+        @Part("isTable") isTable: RequestBody,
+        @Part("scale") scale: RequestBody,
         @Part image: MultipartBody.Part
     ): Response<OcrSpaceResponse>
 }

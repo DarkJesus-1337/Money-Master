@@ -18,6 +18,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "OCR_SPACE_API_KEY", "\"${project.properties["OCR_SPACE_API_KEY"]}\"")
+        buildConfigField("String", "COINCAP_API_KEY", "\"${project.properties["COINCAP_API_KEY"]}\"")
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
     }
 
     // 16 KB Page Size Support hinzufügen
@@ -46,10 +54,6 @@ android {
         jvmTarget = "11"
     }
 
-    buildFeatures {
-        compose = true
-    }
-
     composeOptions {
         kotlinCompilerExtensionVersion = "2.0.0"
     }
@@ -72,6 +76,7 @@ dependencies {
     // Room für Datenbank
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.ads.mobile.sdk)
     ksp(libs.androidx.room.compiler)
 
     // ViewModel und LiveData

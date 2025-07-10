@@ -15,7 +15,7 @@ import com.pixelpioneer.moneymaster.ui.theme.MoneyMasterTheme
 import com.pixelpioneer.moneymaster.ui.viewmodel.BudgetViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.CategoryViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.CryptoViewModel
-import com.pixelpioneer.moneymaster.ui.viewmodel.ReceiptViewModel
+import com.pixelpioneer.moneymaster.ui.viewmodel.ReceiptScanViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.StatisticsViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.TransactionViewModel
 
@@ -41,10 +41,9 @@ class MainActivity : ComponentActivity() {
         (application as MoneyMasterApplication).viewModelFactory
     }
 
-    private val receiptViewModel: ReceiptViewModel by viewModels {
+    private val receiptScanViewModel: ReceiptScanViewModel by viewModels {
         (application as MoneyMasterApplication).viewModelFactory
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +66,7 @@ class MainActivity : ComponentActivity() {
                         statisticsViewModel = statisticsViewModel,
                         budgetViewModel = budgetViewModel,
                         cryptoViewModel = cryptoViewModel,
-                        receiptViewModel = receiptViewModel
+                        receiptScanViewModel = receiptScanViewModel,
                     )
                 }
             }

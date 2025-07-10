@@ -343,6 +343,19 @@ class TransactionViewModel(
     fun refreshTransactions() {
         loadTransactions()
     }
+
+    // Neue Methode zum direkten Hinzufügen einer Transaktion (z.B. für OCR-Import)
+    fun addTransactionDirect(transaction: Transaction) {
+        viewModelScope.launch {
+            try {
+                transactionRepository.insertTransaction(transaction)
+                loadTransactions()
+                loadFinancialSummary()
+            } catch (e: Exception) {
+                // Fehlerbehandlung optional
+            }
+        }
+    }
 }
 
 data class TransactionFormState(

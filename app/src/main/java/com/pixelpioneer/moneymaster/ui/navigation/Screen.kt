@@ -26,10 +26,7 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector?
     data object Budgets : Screen("budgets", "Budgets", Icons.Filled.DateRange)
     data object AddBudget : Screen("add_budget", "Add Budget")
     data object Statistics : Screen("statistics", "Statistics", Icons.Filled.PieChart)
-    data object Camera : Screen("camera", "Camera", Icons.Filled.Camera)
-
-
-    object ReceiptScanner : Screen("receipt_scanner", "Receipt Scanner")
+    data object ReceiptScan : Screen("receipt_scan", "Beleg scannen", Icons.Filled.Camera)
 }
 
 val bottomNavItems = listOf(
@@ -37,5 +34,5 @@ val bottomNavItems = listOf(
     Screen.Transactions,
     Screen.Budgets,
     Screen.Statistics,
-    Screen.Camera
+    Screen.ReceiptScan
 )

@@ -24,6 +24,10 @@ class CategoryViewModel(
     private val _categoryFormState = MutableStateFlow(CategoryFormState())
     val categoryFormState: StateFlow<CategoryFormState> = _categoryFormState
 
+    // Direktes StateFlow für Kategorienliste für UI-Zugriff
+    private val _categories = MutableStateFlow<List<TransactionCategory>>(emptyList())
+    val categories: StateFlow<List<TransactionCategory>> = _categories
+
     init {
         loadCategories()
     }
@@ -36,6 +40,7 @@ class CategoryViewModel(
                     .catch { e ->
                         _categoriesState.value =
                             UiState.Error(e.message ?: "Unknown error occurred")
+                        _categories.value = emptyList()
                     }
                     .collect { categories ->
                         if (categories.isEmpty()) {
@@ -43,9 +48,11 @@ class CategoryViewModel(
                         } else {
                             _categoriesState.value = UiState.Success(categories)
                         }
+                        _categories.value = categories // Setze Liste für UI
                     }
             } catch (e: Exception) {
                 _categoriesState.value = UiState.Error(e.message ?: "Unknown error occurred")
+                _categories.value = emptyList()
             }
         }
     }
