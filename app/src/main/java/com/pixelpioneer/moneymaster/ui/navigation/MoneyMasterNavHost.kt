@@ -1,6 +1,8 @@
 package com.pixelpioneer.moneymaster.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -10,8 +12,10 @@ import androidx.navigation.navArgument
 import com.pixelpioneer.moneymaster.ui.screens.budgets.AddBudgetScreen
 import com.pixelpioneer.moneymaster.ui.screens.budgets.BudgetDetailScreen
 import com.pixelpioneer.moneymaster.ui.screens.budgets.BudgetsScreen
+import com.pixelpioneer.moneymaster.ui.screens.camera.CameraScreen
+import com.pixelpioneer.moneymaster.ui.screens.camera.ReceiptConfirmationScreen
+import com.pixelpioneer.moneymaster.ui.screens.camera.ReceiptScannerScreen
 import com.pixelpioneer.moneymaster.ui.screens.dashboard.DashboardScreen
-import com.pixelpioneer.moneymaster.ui.screens.settings.SettingsScreen
 import com.pixelpioneer.moneymaster.ui.screens.statistics.StatisticsScreen
 import com.pixelpioneer.moneymaster.ui.screens.transactions.AddTransactionScreen
 import com.pixelpioneer.moneymaster.ui.screens.transactions.TransactionDetailScreen
@@ -19,6 +23,7 @@ import com.pixelpioneer.moneymaster.ui.screens.transactions.TransactionsScreen
 import com.pixelpioneer.moneymaster.ui.viewmodel.BudgetViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.CategoryViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.CryptoViewModel
+import com.pixelpioneer.moneymaster.ui.viewmodel.ReceiptViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.StatisticsViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.TransactionViewModel
 
@@ -30,6 +35,7 @@ fun MoneyMasterNavHost(
     budgetViewModel: BudgetViewModel,
     statisticsViewModel: StatisticsViewModel,
     cryptoViewModel: CryptoViewModel,
+    receiptViewModel: ReceiptViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -93,10 +99,33 @@ fun MoneyMasterNavHost(
             )
         }
 
-        composable(Screen.Settings.route) {
-            SettingsScreen(
-                navController = navController
+        composable("camera") {
+            CameraScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onReceiptCaptured = { receipt ->
+                    receiptViewModel.setReceipt(receipt)
+                    navController.navigate("receipt_confirmation")
+                }
             )
+        }
+
+        composable("receipt_confirmation") {
+            val receipt by receiptViewModel.currentReceipt.collectAsState()
+            receipt?.let { receiptData ->
+                ReceiptConfirmationScreen(
+                    receipt = receiptData,
+                    onNavigateBack = {
+                        receiptViewModel.clearReceipt()
+                        navController.popBackStack()
+                    },
+                    onConfirm = { confirmedReceipt ->
+                        // Hier Transaktionen speichern
+                        transactionViewModel.saveReceiptAsTransactions(confirmedReceipt)
+                        receiptViewModel.clearReceipt()
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
 
         composable(
@@ -108,6 +137,13 @@ fun MoneyMasterNavHost(
                 navController = navController,
                 budgetId = budgetId,
                 budgetViewModel = budgetViewModel,
+                transactionViewModel = transactionViewModel
+            )
+        }
+
+        composable(Screen.ReceiptScanner.route) {
+            ReceiptScannerScreen(
+                navController = navController,
                 transactionViewModel = transactionViewModel
             )
         }

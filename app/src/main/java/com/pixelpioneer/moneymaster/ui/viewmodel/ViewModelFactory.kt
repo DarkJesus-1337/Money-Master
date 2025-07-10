@@ -37,6 +37,10 @@ class ViewModelFactory(
                 CryptoViewModel(coinCapRepository) as T
             }
 
+            modelClass.isAssignableFrom(ReceiptViewModel::class.java) -> {
+                ReceiptViewModel() as T
+            }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
     }

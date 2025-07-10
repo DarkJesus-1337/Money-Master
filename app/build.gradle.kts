@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -18,7 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        
+
     }
 
     buildTypes {
@@ -71,6 +72,10 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
+    // Coroutines für async/await
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.kotlinx.coroutines.android.v1102)
+
     // Material Icons Extended (für mehr Icons)
     implementation(libs.androidx.material.icons.extended)
 
@@ -82,6 +87,26 @@ dependencies {
     implementation(libs.converter.gson)
 
     implementation(libs.mpandroidchart)
+
+    // ML Kit Text Recognition
+    implementation(libs.play.services.mlkit.text.recognition)
+
+    // ML Kit Text Recognition
+    implementation(libs.text.recognition)
+
+    // Camera
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+
+    // Permissions
+    implementation(libs.androidx.activity.compose)
+
+    // RecyclerView hinzufügen
+    implementation(libs.androidx.recyclerview)
+
+    // HTTP Client für Multipart Uploads
+    implementation(libs.okhttp)
 
     // Tests
     testImplementation(libs.junit)

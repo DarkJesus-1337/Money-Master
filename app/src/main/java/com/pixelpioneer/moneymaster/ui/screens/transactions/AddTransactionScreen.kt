@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.pixelpioneer.moneymaster.R
 import com.pixelpioneer.moneymaster.ui.components.ErrorMessage
+import com.pixelpioneer.moneymaster.ui.navigation.Screen
 import com.pixelpioneer.moneymaster.ui.viewmodel.TransactionViewModel
 import com.pixelpioneer.moneymaster.util.UiState
 import java.text.SimpleDateFormat
@@ -320,6 +321,15 @@ fun AddTransactionScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Save Transaction")
+            }
+
+            Button(
+                onClick = {
+                    navController.navigate(Screen.ReceiptScanner.route)
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Kassenzettel scannen")
             }
         }
     }

@@ -22,6 +22,10 @@ object FormatUtils {
         return numberFormat.format(amount)
     }
 
+    fun formatCurrencyReceipe(amount: Double): String {
+        return String.format("%.2f €", amount)
+    }
+
     /**
      * Format a timestamp as a date string
      *

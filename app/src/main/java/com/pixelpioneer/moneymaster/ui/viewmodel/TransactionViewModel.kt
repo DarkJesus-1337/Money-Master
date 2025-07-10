@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import com.pixelpioneer.moneymaster.data.model.Receipt
+import kotlinx.coroutines.flow.first
 
 class TransactionViewModel(
     private val transactionRepository: TransactionRepository,
@@ -285,6 +287,54 @@ class TransactionViewModel(
         _transactionFormState.value = updatedFormState
 
         return isValid
+    }
+
+    fun saveReceiptAsTransactions(receipt: Receipt) {
+        viewModelScope.launch {
+            try {
+                val defaultCategory = getDefaultCategory()
+
+                receipt.items.forEach { item ->
+                    val transaction = Transaction(
+                        id = 0,
+                        amount = item.price,
+                        title = item.name,
+                        description = "Vom Kassenzettel: ${receipt.storeName ?: "Unbekannt"}",
+                        category = defaultCategory,
+                        date = System.currentTimeMillis(),
+                        isExpense = true
+                    )
+                    transactionRepository.insertTransaction(transaction)
+                }
+
+                // UI aktualisieren
+                loadTransactions()
+                loadFinancialSummary()
+
+            } catch (e: Exception) {
+                // Fehlerbehandlung
+            }
+        }
+    }
+
+    private suspend fun getDefaultCategory(): TransactionCategory {
+        return try {
+            val categories = categoryRepository.allCategories.first()
+            categories.firstOrNull()
+                ?: TransactionCategory(
+                    id = 1,
+                    name = "Einkauf",
+                    color = 0xFF4CAF50.toInt(),
+                    icon = 0
+                )
+        } catch (e: Exception) {
+            TransactionCategory(
+                id = 1,
+                name = "Einkauf",
+                color = 0xFF4CAF50.toInt(),
+                icon = 0
+            )
+        }
     }
 
     fun refreshFinancialSummary() {

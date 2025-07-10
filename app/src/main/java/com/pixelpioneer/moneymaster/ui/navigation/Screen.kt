@@ -3,6 +3,7 @@ package com.pixelpioneer.moneymaster.ui.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PieChart
@@ -26,7 +27,10 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector?
     data object Budgets : Screen("budgets", "Budgets", Icons.Filled.DateRange)
     data object AddBudget : Screen("add_budget", "Add Budget")
     data object Statistics : Screen("statistics", "Statistics", Icons.Filled.PieChart)
-    data object Settings : Screen("settings", "Settings", Icons.Filled.Settings)
+    data object Camera : Screen("camera", "Camera", Icons.Filled.Camera)
+
+
+    object ReceiptScanner : Screen("receipt_scanner", "Receipt Scanner")
 }
 
 val bottomNavItems = listOf(
@@ -34,5 +38,5 @@ val bottomNavItems = listOf(
     Screen.Transactions,
     Screen.Budgets,
     Screen.Statistics,
-    Screen.Settings
+    Screen.Camera
 )
