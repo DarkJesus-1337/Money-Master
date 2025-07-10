@@ -119,6 +119,7 @@ fun MoneyMasterNavHost(
                         navController.popBackStack()
                     },
                     onConfirm = { confirmedReceipt ->
+
                         transactionViewModel.saveReceiptAsTransactions(confirmedReceipt)
                         receiptViewModel.clearReceipt()
                         navController.popBackStack()

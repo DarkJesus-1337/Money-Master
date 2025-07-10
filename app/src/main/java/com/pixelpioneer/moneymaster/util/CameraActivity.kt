@@ -9,10 +9,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -75,7 +72,7 @@ class CameraActivity : ComponentActivity() {
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture
                 )
-
+                
                 previewView.setOnTouchListener { _, _ ->
                     captureImage(imageCapture)
                     true
@@ -101,11 +98,13 @@ class CameraActivity : ComponentActivity() {
                 }
 
                 override fun onError(exception: ImageCaptureException) {
+
                     Toast.makeText(
                         this@CameraActivity,
                         "Foto-Fehler: ${exception.message}",
                         Toast.LENGTH_SHORT
                     ).show()
+
                 }
             }
         )
@@ -116,6 +115,7 @@ class CameraActivity : ComponentActivity() {
             bitmap,
             onSuccess = { receipt ->
                 runOnUiThread {
+
                     showReceiptResult(receipt)
                 }
             },
@@ -154,5 +154,6 @@ class CameraActivity : ComponentActivity() {
     }
 
     private fun showError(message: String) {
+
     }
 }

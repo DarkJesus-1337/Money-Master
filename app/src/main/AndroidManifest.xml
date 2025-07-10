@@ -9,7 +9,6 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
-
     <application
         android:name=".MoneyMasterApplication"
         android:allowBackup="true"
