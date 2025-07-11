@@ -26,7 +26,7 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector?
     data object Budgets : Screen("budgets", "Budgets", Icons.Filled.DateRange)
     data object AddBudget : Screen("add_budget", "Add Budget")
     data object Statistics : Screen("statistics", "Statistics", Icons.Filled.PieChart)
-    data object ReceiptScan : Screen("receipt_scan", "Beleg scannen", Icons.Filled.Camera)
+    data object ReceiptScan : Screen("receipt_scan", "Scan", Icons.Filled.Camera)
 }
 
 val bottomNavItems = listOf(

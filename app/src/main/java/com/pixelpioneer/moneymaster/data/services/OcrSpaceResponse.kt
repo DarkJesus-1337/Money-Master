@@ -1,5 +1,6 @@
 package com.pixelpioneer.moneymaster.data.services
 
+import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -8,37 +9,70 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 data class OcrSpaceResponse(
-    val ParsedResults: List<ParsedResult>?,
-    val OCRExitCode: Int,
-    val IsErroredOnProcessing: Boolean,
-    val ErrorMessage: Any?, // String oder Array
-    val ErrorDetails: Any?  // String oder Array
+    @SerializedName("ParsedResults")
+    val parsedResults: List<ParsedResult>?,
+
+    @SerializedName("OCRExitCode")
+    val ocrExitCode: Int,
+
+    @SerializedName("IsErroredOnProcessing")
+    val isErroredOnProcessing: Boolean,
+
+    @SerializedName("ErrorMessage")
+    val errorMessage: Any?, // String oder Array
+
+    @SerializedName("ErrorDetails")
+    val errorDetails: Any?  // String oder Array
 )
 
 data class ParsedResult(
-    val TextOverlay: TextOverlay?,
-    val TextOrientation: String?,
-    val FileParseExitCode: Int,
-    val ParsedText: String?,
-    val ErrorMessage: Any?, // String oder Array
-    val ErrorDetails: Any?  // String oder Array
+    @SerializedName("TextOverlay")
+    val textOverlay: TextOverlay?,
+
+    @SerializedName("TextOrientation")
+    val textOrientation: String?,
+
+    @SerializedName("FileParseExitCode")
+    val fileParseExitCode: Int,
+
+    @SerializedName("ParsedText")
+    val parsedText: String?,
+
+    @SerializedName("ErrorMessage")
+    val errorMessage: Any?, // String oder Array
+
+    @SerializedName("ErrorDetails")
+    val errorDetails: Any?  // String oder Array
 )
 
 data class TextOverlay(
-    val Lines: List<Line>?
+    @SerializedName("Lines")
+    val lines: List<Line>?
 )
 
 data class Line(
-    val LineText: String?,
-    val Words: List<Word>?
+    @SerializedName("LineText")
+    val lineText: String?,
+
+    @SerializedName("Words")
+    val words: List<Word>?
 )
 
 data class Word(
-    val WordText: String?,
-    val Left: Double,
-    val Top: Double,
-    val Height: Double,
-    val Width: Double
+    @SerializedName("WordText")
+    val wordText: String?,
+
+    @SerializedName("Left")
+    val left: Double,
+
+    @SerializedName("Top")
+    val top: Double,
+
+    @SerializedName("Height")
+    val height: Double,
+
+    @SerializedName("Width")
+    val width: Double
 )
 
 interface OcrSpaceApiService {
