@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -24,6 +25,7 @@ android {
             "OCR_SPACE_API_KEY",
             "\"${project.properties["OCR_SPACE_API_KEY"]}\""
         )
+
         buildConfigField(
             "String",
             "COINCAP_API_KEY",
@@ -132,6 +134,13 @@ dependencies {
 
     // HTTP Client für Multipart Uploads
     implementation(libs.okhttp)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.config)
+
 
     // Tests
     testImplementation(libs.junit)

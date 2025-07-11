@@ -37,10 +37,25 @@ class ReceiptScanViewModel(
                     _scannedItems.value = emptyList()
                     return@launch
                 }
-                val parsedText = response.ParsedResults?.firstOrNull()?.ParsedText.orEmpty()
-                val errorMessage = response.ErrorMessage?.let { anyToString(it) }
-                val errorDetails = response.ErrorDetails?.let { anyToString(it) }
-                val exitCode = response.OCRExitCode
+
+                // Verwende reflection oder safe calls für dynamische Response-Struktur
+                val parsedResults = response.javaClass.getDeclaredField("ParsedResults").get(response) as? List<*>
+                val parsedText = parsedResults?.firstOrNull()?.let { result ->
+                    result.javaClass.getDeclaredField("ParsedText").get(result) as? String
+                }.orEmpty()
+
+                val errorMessage = try {
+                    response.javaClass.getDeclaredField("ErrorMessage").get(response)?.let { anyToString(it) }
+                } catch (e: Exception) { null }
+
+                val errorDetails = try {
+                    response.javaClass.getDeclaredField("ErrorDetails").get(response)?.let { anyToString(it) }
+                } catch (e: Exception) { null }
+
+                val exitCode = try {
+                    response.javaClass.getDeclaredField("OCRExitCode").get(response)
+                } catch (e: Exception) { null }
+
                 Log.d("ReceiptScanViewModel", "OCR ParsedText: $parsedText")
                 if (parsedText.isBlank()) {
                     _error.value = buildString {
@@ -76,7 +91,6 @@ class ReceiptScanViewModel(
         text: String,
         defaultCategory: TransactionCategory
     ): List<Transaction> {
-        // Flexibleres Regex: Erlaubt auch Preise mit Leerzeichen, Komma oder Punkt, optional führende Null
         val regex = Regex("""(.+?)\s+(\d{1,3}[\.,]\d{2})""")
         val now = System.currentTimeMillis()
         return text.lines().mapNotNull { line ->

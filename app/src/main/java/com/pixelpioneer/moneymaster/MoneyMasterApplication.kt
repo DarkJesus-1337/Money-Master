@@ -1,6 +1,7 @@
 package com.pixelpioneer.moneymaster
 
 import android.app.Application
+import android.util.Log
 import com.pixelpioneer.moneymaster.data.db.MoneyMasterDatabase
 import com.pixelpioneer.moneymaster.data.repository.BudgetRepository
 import com.pixelpioneer.moneymaster.data.repository.CategoryRepository
@@ -8,7 +9,11 @@ import com.pixelpioneer.moneymaster.data.repository.CoinCapRepository
 import com.pixelpioneer.moneymaster.data.repository.ReceiptScanRepository
 import com.pixelpioneer.moneymaster.data.repository.TransactionRepository
 import com.pixelpioneer.moneymaster.data.services.CoinCapApiClient
+import com.pixelpioneer.moneymaster.data.services.RemoteConfigManager
 import com.pixelpioneer.moneymaster.ui.viewmodel.ViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MoneyMasterApplication : Application() {
 
@@ -17,7 +22,7 @@ class MoneyMasterApplication : Application() {
     }
 
     private val transactionRepository by lazy {
-        TransactionRepository(database.transactionDao())
+        TransactionRepository(database.transactionDao(), coinCapApiClient.api)
     }
 
     private val categoryRepository by lazy {
@@ -28,22 +33,21 @@ class MoneyMasterApplication : Application() {
         BudgetRepository(database.budgetDao(), database.transactionDao())
     }
 
-    private val coinCapApiService by lazy {
-        CoinCapApiClient.api
+    val remoteConfigManager by lazy {
+        RemoteConfigManager(this)
+    }
+
+    private val coinCapApiClient by lazy {
+        CoinCapApiClient(remoteConfigManager)
     }
 
     private val coinCapRepository by lazy {
-        CoinCapRepository(coinCapApiService)
+        CoinCapRepository(coinCapApiClient.api)
     }
-
-    private val apiKey = BuildConfig.OCR_SPACE_API_KEY
 
     private val receiptScanRepository by lazy {
-        ReceiptScanRepository(
-            apiKey = apiKey
-        )
+        ReceiptScanRepository(remoteConfigManager)
     }
-
 
     val viewModelFactory by lazy {
         ViewModelFactory(
@@ -51,8 +55,26 @@ class MoneyMasterApplication : Application() {
             categoryRepository = categoryRepository,
             budgetRepository = budgetRepository,
             coinCapRepository = coinCapRepository,
-            receiptScanRepository = receiptScanRepository
+            receiptScanRepository = receiptScanRepository,
+            remoteConfigManager = remoteConfigManager
         )
     }
 
+    override fun onCreate() {
+        super.onCreate()
+
+        // Remote Config im Hintergrund laden
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val success = remoteConfigManager.fetchAndActivate()
+                Log.d("MoneyMasterApp", "Remote config loaded: $success")
+
+                if (BuildConfig.DEBUG) {
+                    Log.d("MoneyMasterApp", "Remote config debug info: ${remoteConfigManager.getDebugInfo()}")
+                }
+            } catch (e: Exception) {
+                Log.e("MoneyMasterApp", "Error loading remote config", e)
+            }
+        }
+    }
 }

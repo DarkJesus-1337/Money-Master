@@ -5,12 +5,15 @@ import com.pixelpioneer.moneymaster.data.mapper.TransactionMapper
 import com.pixelpioneer.moneymaster.data.model.Asset
 import com.pixelpioneer.moneymaster.data.model.Transaction
 import com.pixelpioneer.moneymaster.data.relation.TransactionWithCategory
-import com.pixelpioneer.moneymaster.data.services.CoinCapApiClient
+import com.pixelpioneer.moneymaster.data.services.CoinCapApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Calendar
 
-class TransactionRepository(private val transactionDao: TransactionDao) {
+class TransactionRepository(
+    private val transactionDao: TransactionDao,
+    private val coinCapApiService: CoinCapApiService? = null
+) {
     val allTransactionsWithCategory = transactionDao.getTransactionsWithCategory()
         .map { list -> list.map { TransactionMapper.fromEntity(it) } }
 
@@ -132,7 +135,9 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
     }
 
     suspend fun fetchCryptoAssets(limit: Int = 10): List<Asset> {
-        val response = CoinCapApiClient.api.getAssets(limit)
+        val apiService = coinCapApiService ?: throw IllegalStateException("CoinCap API Service not initialized")
+
+        val response = apiService.getAssets(limit)
         if (response.isSuccessful) {
             return response.body()?.data ?: emptyList()
         } else {

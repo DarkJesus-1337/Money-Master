@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.pixelpioneer.moneymaster" />
+                  <option name="mobileSdkAppId" value="1:647207770875:android:a952e0979276ff131a2e5e" />
+                  <option name="projectId" value="money-master-33c2d" />
+                  <option name="projectNumber" value="647207770875" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

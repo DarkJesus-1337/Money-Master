@@ -6,13 +6,13 @@ import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object CoinCapApiClient {
-    private const val API_KEY = "d43a6346d536e50273f6c87c078e88cacd4d7171fadfd58d4255b6cf7913b2ae"
+class CoinCapApiClient(private val remoteConfigManager: RemoteConfigManager) {
 
     private val authInterceptor = Interceptor { chain ->
         val original: Request = chain.request()
+        val apiKey = remoteConfigManager.getCoinCapApiKey()
         val request = original.newBuilder()
-            .addHeader("Authorization", "Bearer $API_KEY")
+            .addHeader("Authorization", "Bearer $apiKey")
             .build()
         chain.proceed(request)
     }
