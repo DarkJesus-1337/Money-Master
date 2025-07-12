@@ -69,7 +69,10 @@ class MoneyMasterApplication : Application() {
                 Log.d("MoneyMasterApp", "Remote config loaded: $success")
 
                 if (BuildConfig.DEBUG) {
-                    Log.d("MoneyMasterApp", "Remote config debug info: ${remoteConfigManager.getDebugInfo()}")
+                    Log.d(
+                        "MoneyMasterApp",
+                        "Remote config debug info: ${remoteConfigManager.getDebugInfo()}"
+                    )
                 }
             } catch (e: Exception) {
                 Log.e("MoneyMasterApp", "Error loading remote config", e)

@@ -47,8 +47,12 @@ class ReceiptScanViewModel(
                     _error.value = buildString {
                         append("Kein Text erkannt.\n")
                         append("OCRExitCode: ${response.ocrExitCode}\n")
-                        response.errorMessage?.let { if (it.toString().isNotBlank()) append("ErrorMessage: $it\n") }
-                        response.errorDetails?.let { if (it.toString().isNotBlank()) append("ErrorDetails: $it\n") }
+                        response.errorMessage?.let {
+                            if (it.toString().isNotBlank()) append("ErrorMessage: $it\n")
+                        }
+                        response.errorDetails?.let {
+                            if (it.toString().isNotBlank()) append("ErrorDetails: $it\n")
+                        }
                     }
                     _scannedItems.value = emptyList()
                     return@launch

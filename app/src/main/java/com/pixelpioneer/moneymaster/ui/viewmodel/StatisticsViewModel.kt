@@ -2,7 +2,6 @@ package com.pixelpioneer.moneymaster.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pixelpioneer.moneymaster.data.model.Asset
 import com.pixelpioneer.moneymaster.data.model.TransactionCategory
 import com.pixelpioneer.moneymaster.data.repository.CategoryRepository
 import com.pixelpioneer.moneymaster.data.repository.TransactionRepository

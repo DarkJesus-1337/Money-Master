@@ -42,7 +42,7 @@ fun ErrorMessage(
         ) {
             Text(
                 text = "Error",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.error
             )
 
@@ -50,8 +50,9 @@ fun ErrorMessage(
 
             Text(
                 text = message,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -66,7 +67,7 @@ fun ErrorMessage(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Text(text = "Retry")
+                Text(text = "Retry", style = MaterialTheme.typography.labelLarge)
             }
         }
     }

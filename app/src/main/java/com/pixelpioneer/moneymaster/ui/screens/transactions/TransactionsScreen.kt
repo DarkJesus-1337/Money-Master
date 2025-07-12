@@ -31,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -58,7 +57,7 @@ fun TransactionsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Transactions") },
+                title = { Text("Transactions", style = MaterialTheme.typography.headlineMedium) },
                 actions = {
                     IconButton(onClick = { navController.navigate(Screen.AddTransaction.route) }) {
                         Icon(Icons.Filled.Add, contentDescription = "Add Transaction")
@@ -80,7 +79,12 @@ fun TransactionsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
-                placeholder = { Text("Search transactions") },
+                placeholder = {
+                    Text(
+                        "Search transactions",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),

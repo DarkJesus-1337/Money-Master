@@ -75,11 +75,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-   kotlin {
-       compilerOptions {
-           jvmTarget.set(JvmTarget.JVM_11)
-       }
-   }
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
 
     composeOptions {
         kotlinCompilerExtensionVersion = "2.0.0"
@@ -105,6 +105,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.ads.mobile.sdk)
     implementation(libs.androidx.media3.effect)
+    implementation(libs.androidx.ui.text.google.fonts)
     ksp(libs.androidx.room.compiler)
 
     // ViewModel und LiveData

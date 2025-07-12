@@ -1,6 +1,10 @@
 package com.pixelpioneer.moneymaster.data.repository
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.util.Log
+import androidx.exifinterface.media.ExifInterface
 import com.pixelpioneer.moneymaster.data.services.OcrSpaceApiClient
 import com.pixelpioneer.moneymaster.data.services.OcrSpaceResponse
 import com.pixelpioneer.moneymaster.data.services.RemoteConfigManager
@@ -8,14 +12,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.File
-import java.io.IOException
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import androidx.exifinterface.media.ExifInterface
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 /**
  * Repository for scanning receipts and processing OCR results.
@@ -30,12 +30,16 @@ class ReceiptScanRepository(
 ) {
     companion object {
         private const val TAG = "ReceiptScanRepository"
+
         /** Maximum allowed image file size in bytes (1MB). */
         private const val MAX_IMAGE_SIZE = 1024 * 1024 // 1MB
+
         /** Maximum image width in pixels for compression. */
         private const val MAX_WIDTH = 1024
+
         /** Maximum image height in pixels for compression. */
         private const val MAX_HEIGHT = 1024
+
         /** JPEG compression quality (0-100). */
         private const val JPEG_QUALITY = 85
     }
@@ -156,7 +160,8 @@ class ReceiptScanRepository(
 
         val scaledBitmap = Bitmap.createScaledBitmap(rotatedBitmap, newWidth, newHeight, true)
 
-        val compressedFile = File.createTempFile("compressed_receipt", ".jpg", originalFile.parentFile)
+        val compressedFile =
+            File.createTempFile("compressed_receipt", ".jpg", originalFile.parentFile)
 
         FileOutputStream(compressedFile).use { fos ->
             val byteArrayOutputStream = ByteArrayOutputStream()
@@ -250,7 +255,8 @@ class ReceiptScanRepository(
         return mapOf(
             "apiKeyLength" to apiKey.length.toString(),
             "apiKeyPrefix" to apiKey.take(10),
-            "hasRemoteConfig" to remoteConfigManager.hasKey(RemoteConfigManager.OCR_SPACE_API_KEY).toString()
+            "hasRemoteConfig" to remoteConfigManager.hasKey(RemoteConfigManager.OCR_SPACE_API_KEY)
+                .toString()
         )
     }
 }

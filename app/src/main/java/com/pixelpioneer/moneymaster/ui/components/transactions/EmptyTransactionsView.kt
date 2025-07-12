@@ -30,14 +30,15 @@ fun EmptyTransactionsView(onAddButtonClick: () -> Unit) {
         ) {
             Text(
                 text = "No transactions yet",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "Track your expenses by adding your first transaction",
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
@@ -51,7 +52,7 @@ fun EmptyTransactionsView(onAddButtonClick: () -> Unit) {
                     contentDescription = "Add",
                     modifier = Modifier.padding(end = 8.dp)
                 )
-                Text("Add Transaction")
+                Text("Add Transaction", style = MaterialTheme.typography.labelLarge)
             }
         }
     }

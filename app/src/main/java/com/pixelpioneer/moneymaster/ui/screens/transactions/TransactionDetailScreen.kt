@@ -238,8 +238,18 @@ fun TransactionDetailScreen(
                     if (showDeleteDialog) {
                         AlertDialog(
                             onDismissRequest = { showDeleteDialog = false },
-                            title = { Text("Delete Transaction") },
-                            text = { Text("Are you sure you want to delete this transaction? This action cannot be undone.") },
+                            title = {
+                                Text(
+                                    "Delete Transaction",
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            },
+                            text = {
+                                Text(
+                                    "Are you sure you want to delete this transaction? This action cannot be undone.",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            },
                             confirmButton = {
                                 Button(
                                     onClick = {
@@ -248,14 +258,14 @@ fun TransactionDetailScreen(
                                         navController.popBackStack()
                                     }
                                 ) {
-                                    Text("Delete")
+                                    Text("Delete", style = MaterialTheme.typography.labelLarge)
                                 }
                             },
                             dismissButton = {
                                 TextButton(
                                     onClick = { showDeleteDialog = false }
                                 ) {
-                                    Text("Cancel")
+                                    Text("Cancel", style = MaterialTheme.typography.labelLarge)
                                 }
                             }
                         )
@@ -276,7 +286,7 @@ fun TransactionDetailScreen(
                     ) {
                         Text(
                             text = "Transaction not found",
-                            style = MaterialTheme.typography.titleLarge
+                            style = MaterialTheme.typography.headlineSmall
                         )
                     }
                 }

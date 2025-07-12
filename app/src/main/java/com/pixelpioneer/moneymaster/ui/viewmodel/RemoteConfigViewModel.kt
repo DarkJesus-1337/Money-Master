@@ -24,17 +24,17 @@ data class RemoteConfigState(
 class RemoteConfigViewModel(
     private val remoteConfigManager: RemoteConfigManager
 ) : ViewModel() {
-    
+
     private val _uiState = MutableStateFlow(RemoteConfigState())
 
     init {
         loadRemoteConfig()
     }
-    
+
     private fun loadRemoteConfig() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-            
+
             try {
                 val success = remoteConfigManager.fetchAndActivate()
                 _uiState.value = _uiState.value.copy(

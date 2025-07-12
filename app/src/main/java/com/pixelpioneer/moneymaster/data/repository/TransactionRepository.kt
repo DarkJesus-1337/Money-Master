@@ -236,7 +236,8 @@ class TransactionRepository(
      * @throws Exception If there's an error fetching the assets.
      */
     suspend fun fetchCryptoAssets(limit: Int = 10): List<Asset> {
-        val apiService = coinCapApiService ?: throw IllegalStateException("CoinCap API Service not initialized")
+        val apiService =
+            coinCapApiService ?: throw IllegalStateException("CoinCap API Service not initialized")
 
         val response = apiService.getAssets(limit)
         if (response.isSuccessful) {

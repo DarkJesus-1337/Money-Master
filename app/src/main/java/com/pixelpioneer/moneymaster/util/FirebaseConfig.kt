@@ -2,10 +2,10 @@ package com.pixelpioneer.moneymaster.util
 
 import android.app.Activity
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.pixelpioneer.moneymaster.MoneyMasterApplication
+import kotlinx.coroutines.launch
 
 /**
  * Extension für Activities um Remote Config zu laden
@@ -15,7 +15,7 @@ fun Activity.loadRemoteConfig(
     onError: ((Exception) -> Unit)? = null
 ) {
     val app = application as MoneyMasterApplication
-    
+
     if (this is LifecycleOwner) {
         lifecycleScope.launch {
             try {
@@ -37,7 +37,7 @@ fun Activity.loadRemoteConfig(
  */
 fun Activity.showRemoteConfigStatus() {
     val app = application as MoneyMasterApplication
-    
+
     if (this is LifecycleOwner) {
         lifecycleScope.launch {
             try {
@@ -47,15 +47,15 @@ fun Activity.showRemoteConfigStatus() {
                 } else {
                     "Remote Config konnte nicht geladen werden - verwende lokale Werte"
                 }
-                
+
                 runOnUiThread {
                     Toast.makeText(this@showRemoteConfigStatus, message, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 runOnUiThread {
                     Toast.makeText(
-                        this@showRemoteConfigStatus, 
-                        "Fehler beim Laden der Remote Config: ${e.message}", 
+                        this@showRemoteConfigStatus,
+                        "Fehler beim Laden der Remote Config: ${e.message}",
                         Toast.LENGTH_LONG
                     ).show()
                 }

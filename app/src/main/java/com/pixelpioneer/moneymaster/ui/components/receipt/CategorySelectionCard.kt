@@ -29,7 +29,8 @@ fun CategorySelectionCard(
             Text(
                 text = "Kategorie auswählen",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(8.dp))
             if (categories.isNotEmpty()) {
@@ -41,7 +42,7 @@ fun CategorySelectionCard(
             } else {
                 Text(
                     text = "Keine Kategorien verfügbar",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.error
                 )
             }

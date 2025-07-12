@@ -40,11 +40,12 @@ fun AddAllTransactionsButton(
                 Text(
                     text = "Gesamtbetrag:",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = "%.2f €".format(totalAmount),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -59,7 +60,10 @@ fun AddAllTransactionsButton(
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Alle als Transaktionen hinzufügen")
+                Text(
+                    "Alle als Transaktionen hinzufügen",
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
         }
     }

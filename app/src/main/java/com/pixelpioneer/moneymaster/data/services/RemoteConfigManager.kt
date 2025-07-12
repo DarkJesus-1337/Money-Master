@@ -7,7 +7,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.pixelpioneer.moneymaster.BuildConfig
-import com.pixelpioneer.moneymaster.R
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -19,23 +18,24 @@ import kotlinx.coroutines.tasks.await
  * @property context Application context for initialization.
  */
 class RemoteConfigManager(private val context: Context) {
-    
+
     private val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
-    
+
     companion object {
         private const val TAG = "RemoteConfigManager"
         private const val CACHE_EXPIRATION = 3600L
 
         /** Remote Config key for OCR Space API key. */
         const val OCR_SPACE_API_KEY = "ocr_space_api_key"
+
         /** Remote Config key for CoinCap API key. */
         const val COINCAP_API_KEY = "coincap_api_key"
     }
-    
+
     init {
         initializeRemoteConfig()
     }
-    
+
     /**
      * Initializes Firebase Remote Config with settings and default values.
      */
@@ -43,9 +43,9 @@ class RemoteConfigManager(private val context: Context) {
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = if (BuildConfig.DEBUG) 0 else CACHE_EXPIRATION
         }
-        
+
         remoteConfig.setConfigSettingsAsync(configSettings)
-        
+
         remoteConfig.setDefaultsAsync(
             mapOf(
                 OCR_SPACE_API_KEY to BuildConfig.OCR_SPACE_API_KEY,
@@ -53,7 +53,7 @@ class RemoteConfigManager(private val context: Context) {
             )
         )
     }
-    
+
     /**
      * Fetches and activates remote config values from Firebase.
      *
@@ -69,7 +69,7 @@ class RemoteConfigManager(private val context: Context) {
             false
         }
     }
-    
+
     /**
      * Retrieves the OCR Space API key from remote config.
      *
@@ -79,7 +79,7 @@ class RemoteConfigManager(private val context: Context) {
         return remoteConfig.getString(OCR_SPACE_API_KEY).takeIf { it.isNotEmpty() }
             ?: BuildConfig.OCR_SPACE_API_KEY
     }
-    
+
     /**
      * Retrieves the CoinCap API key from remote config.
      *
@@ -89,7 +89,7 @@ class RemoteConfigManager(private val context: Context) {
         return remoteConfig.getString(COINCAP_API_KEY).takeIf { it.isNotEmpty() }
             ?: BuildConfig.COINCAP_API_KEY
     }
-    
+
     /**
      * Checks if a specific key is available in remote config.
      *
@@ -99,7 +99,7 @@ class RemoteConfigManager(private val context: Context) {
     fun hasKey(key: String): Boolean {
         return remoteConfig.getString(key).isNotEmpty()
     }
-    
+
     /**
      * Retrieves all available keys from remote config.
      *
@@ -108,7 +108,7 @@ class RemoteConfigManager(private val context: Context) {
     fun getAllKeys(): Set<String> {
         return remoteConfig.all.keys
     }
-    
+
     /**
      * Provides debug information about the remote config state.
      *
