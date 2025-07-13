@@ -17,9 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pixelpioneer.moneymaster.ui.theme.MoneyMasterTheme
 import com.pixelpioneer.moneymaster.ui.viewmodel.FinancialSummary
 import com.pixelpioneer.moneymaster.util.FormatUtils
 
@@ -50,7 +51,7 @@ fun FinancialSummaryCards(summary: FinancialSummary) {
                         )
                         Text(
                             text = "Current Balance",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.padding(start = 8.dp),
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
@@ -86,13 +87,14 @@ fun FinancialSummaryCards(summary: FinancialSummary) {
                         Icon(
                             imageVector = Icons.Default.ArrowUpward,
                             contentDescription = "Income",
-                            tint = Color.Green
+                            tint = MaterialTheme.colorScheme.tertiary
                         )
                         Text(
                             text = "Income",
+                            fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.padding(start = 8.dp),
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            color = MaterialTheme.colorScheme.tertiary
                         )
                     }
 
@@ -121,11 +123,12 @@ fun FinancialSummaryCards(summary: FinancialSummary) {
                         Icon(
                             imageVector = Icons.Default.ArrowDownward,
                             contentDescription = "Expenses",
-                            tint = Color.Red
+                            tint = MaterialTheme.colorScheme.error
                         )
                         Text(
                             text = "Expenses",
                             style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(start = 8.dp),
                             color = MaterialTheme.colorScheme.onErrorContainer
                         )
@@ -141,5 +144,32 @@ fun FinancialSummaryCards(summary: FinancialSummary) {
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FinancialSummaryCardsDarkPreview() {
+    MoneyMasterTheme (darkTheme = false) {
+        FinancialSummaryCards(
+            summary = FinancialSummary(
+                balance = -150.75,
+                totalIncome = 1200.00,
+                totalExpenses = 1350.75
+            )
+        )
+    }
+}
+@Preview()
+@Composable
+fun FinancialSummaryCardsDarkPreviewDark() {
+    MoneyMasterTheme (darkTheme = true) {
+        FinancialSummaryCards(
+            summary = FinancialSummary(
+                balance = -150.75,
+                totalIncome = 1200.00,
+                totalExpenses = 1350.75
+            )
+        )
     }
 }

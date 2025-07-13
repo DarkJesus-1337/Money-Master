@@ -25,9 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.pixelpioneer.moneymaster.ui.components.BudgetOverview
 import com.pixelpioneer.moneymaster.ui.components.ErrorMessage
-import com.pixelpioneer.moneymaster.ui.components.RecentTransactionItem
 import com.pixelpioneer.moneymaster.ui.components.ViewAllTransactionsButton
 import com.pixelpioneer.moneymaster.ui.components.dashboard.FinancialSummaryCards
 import com.pixelpioneer.moneymaster.ui.components.emptyview.EmptyBudgetsList
@@ -38,6 +36,17 @@ import com.pixelpioneer.moneymaster.ui.navigation.Screen
 import com.pixelpioneer.moneymaster.ui.viewmodel.BudgetViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.TransactionViewModel
 import com.pixelpioneer.moneymaster.util.UiState
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.pixelpioneer.moneymaster.data.sample.SampleData
+import com.pixelpioneer.moneymaster.ui.components.dashboard.BudgetOverview
+import com.pixelpioneer.moneymaster.ui.components.dashboard.RecentTransactionItem
+import com.pixelpioneer.moneymaster.ui.theme.MoneyMasterTheme
+import com.pixelpioneer.moneymaster.ui.viewmodel.FinancialSummary
+import com.pixelpioneer.moneymaster.ui.viewmodel.MockViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
