@@ -10,11 +10,15 @@ import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(val route: String, val title: String, val icon: ImageVector? = null) {
-    data object Dashboard : Screen("dashboard", "Dashboard", Icons.Filled.Home)
-    data object Transactions :
-        Screen("transactions", "Transactions", Icons.AutoMirrored.Filled.List)
+    data object Dashboard : Screen("dashboard", "Home", Icons.Filled.Home)
+    data object Transactions : Screen("transactions", "History", Icons.AutoMirrored.Filled.List)
+    data object Budgets : Screen("budgets", "Budget", Icons.Filled.DateRange)
+    data object Statistics : Screen("statistics", "Stats", Icons.Filled.PieChart)
+    data object ReceiptScan : Screen("receipt_scan", "Scan", Icons.Filled.Camera)
 
-    data object AddTransaction : Screen("add_transaction", "New Transaction", Icons.Filled.Add)
+    data object AddBudget : Screen("add_budget", "Add Budget")
+    data object AddTransaction : Screen("add_transaction", "Add", Icons.Filled.Add)
+
     data object TransactionDetail : Screen("transaction_detail/{transactionId}", "Details") {
         fun createRoute(transactionId: Long) = "transaction_detail/$transactionId"
     }
@@ -23,10 +27,6 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector?
         fun createRoute(budgetId: Long) = "budget_detail/$budgetId"
     }
 
-    data object Budgets : Screen("budgets", "Budgets", Icons.Filled.DateRange)
-    data object AddBudget : Screen("add_budget", "Add Budget")
-    data object Statistics : Screen("statistics", "Statistics", Icons.Filled.PieChart)
-    data object ReceiptScan : Screen("receipt_scan", "Scan", Icons.Filled.Camera)
 
     data object EditBudget : Screen("edit_budget/{budgetId}", "Edit Budget") {
         fun createRoute(budgetId: Long) = "edit_budget/$budgetId"

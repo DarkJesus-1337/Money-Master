@@ -105,6 +105,53 @@ fun DashboardScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
+                    text = "Budget Overview",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                when (budgetsState) {
+                    is UiState.Loading -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+
+                    is UiState.Success -> {
+                        BudgetOverview(
+                            budgets = budgetsState.data,
+                            onBudgetsClick = { navController.navigate(Screen.Budgets.route) }
+                        )
+                    }
+
+                    is UiState.Error -> {
+                        ErrorMessage(
+                            message = budgetsState.message,
+                            onRetry = { budgetViewModel.refreshBudgets() }
+                        )
+                    }
+
+                    is UiState.Empty -> {
+                        EmptyBudgetsList(
+                            onAddBudget = { navController.navigate(Screen.AddBudget.route) }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
                     text = "Recent Transactions",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
@@ -179,52 +226,6 @@ fun DashboardScreen(
                 }
             }
 
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = "Budget Overview",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                when (budgetsState) {
-                    is UiState.Loading -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
-
-                    is UiState.Success -> {
-                        BudgetOverview(
-                            budgets = budgetsState.data,
-                            onBudgetsClick = { navController.navigate(Screen.Budgets.route) }
-                        )
-                    }
-
-                    is UiState.Error -> {
-                        ErrorMessage(
-                            message = budgetsState.message,
-                            onRetry = { budgetViewModel.refreshBudgets() }
-                        )
-                    }
-
-                    is UiState.Empty -> {
-                        EmptyBudgetsList(
-                            onAddBudget = { navController.navigate(Screen.AddBudget.route) }
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-            }
         }
     }
 }

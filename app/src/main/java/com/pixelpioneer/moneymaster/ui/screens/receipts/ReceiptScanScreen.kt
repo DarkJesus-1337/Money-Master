@@ -1,5 +1,7 @@
 package com.pixelpioneer.moneymaster.ui.screens.receipts
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -25,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.pixelpioneer.moneymaster.data.model.TransactionCategory
 import com.pixelpioneer.moneymaster.ui.components.receipt.AddAllTransactionsButton
@@ -39,6 +43,7 @@ import com.pixelpioneer.moneymaster.ui.viewmodel.CategoryViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.ReceiptScanViewModel
 import com.pixelpioneer.moneymaster.ui.viewmodel.TransactionViewModel
 import com.pixelpioneer.moneymaster.util.uriToFile
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,6 +69,19 @@ fun ReceiptScanScreen(
     var selectedCategory by remember { mutableStateOf<TransactionCategory?>(null) }
     var scanTriggered by remember { mutableStateOf(false) }
 
+    // Erstelle temporäre Datei für Kamera-Aufnahme
+    val tempImageFile = remember {
+        File(context.cacheDir, "temp_receipt_${System.currentTimeMillis()}.jpg")
+    }
+
+    val tempImageUri = remember {
+        FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            tempImageFile
+        )
+    }
+
     LaunchedEffect(scannedItems) {
         editableItems = scannedItems.toList()
     }
@@ -73,6 +91,23 @@ fun ReceiptScanScreen(
     ) { uri: Uri? ->
         selectedImageUri = uri
         scanTriggered = false
+    }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            selectedImageUri = tempImageUri
+            scanTriggered = false
+        }
+    }
+
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            cameraLauncher.launch(tempImageUri)
+        }
     }
 
     Scaffold(
@@ -93,9 +128,23 @@ fun ReceiptScanScreen(
             item {
                 ImageSelectionCard(
                     selectedImageUri = selectedImageUri,
-                    onImageSelect = { imagePickerLauncher.launch("image/*") }
+                    onImageSelect = { imagePickerLauncher.launch("image/*") },
+                    onCameraCapture = {
+                        when {
+                            ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.CAMERA
+                            ) == PackageManager.PERMISSION_GRANTED -> {
+                                cameraLauncher.launch(tempImageUri)
+                            }
+                            else -> {
+                                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                            }
+                        }
+                    }
                 )
             }
+
 
             if (selectedImageUri != null) {
                 item {
