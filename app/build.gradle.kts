@@ -18,7 +18,7 @@ android {
         minSdk = 24
         targetSdk = 35
         versionCode = 1
-        versionName = "1.3"
+        versionName = "1.31"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -160,9 +160,11 @@ dependencies {
     implementation(libs.firebase.config)
     implementation(libs.firebase.appdistribution)
 
+    // AppCompat für Firebase App Distribution
+    implementation(libs.androidx.appcompat)
+
     // exifinterface für EXIF-Daten
     implementation(libs.androidx.exifinterface)
-
 
     // Tests
     testImplementation(libs.junit)
