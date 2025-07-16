@@ -158,6 +158,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.config.ktx)
     implementation(libs.firebase.config)
+    implementation(libs.firebase.appdistribution)
 
     // exifinterface für EXIF-Daten
     implementation(libs.androidx.exifinterface)
