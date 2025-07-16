@@ -1,36 +1,15 @@
 package com.pixelpioneer.moneymaster.ui.screens.statistics
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.pixelpioneer.moneymaster.ui.components.coincap.AssetChip
-import com.pixelpioneer.moneymaster.ui.components.coincap.InfoRow
-import com.pixelpioneer.moneymaster.ui.components.coincap.PriceChart
+import androidx.compose.ui.tooling.preview.Preview
+import com.pixelpioneer.moneymaster.data.model.Asset
+import com.pixelpioneer.moneymaster.data.model.HistoryDataPoint
+import com.pixelpioneer.moneymaster.ui.components.coincap.CryptoAssetsScreenContent
+import com.pixelpioneer.moneymaster.ui.theme.MoneyMasterTheme
 import com.pixelpioneer.moneymaster.ui.viewmodel.CryptoViewModel
-import com.pixelpioneer.moneymaster.util.FormatUtils
 import com.pixelpioneer.moneymaster.util.UiState
 
 @Composable
@@ -43,189 +22,77 @@ fun CryptoAssetsScreen(viewModel: CryptoViewModel) {
     val cryptoHistoryState by viewModel.cryptoHistoryState.collectAsState()
     val selectedAsset by viewModel.selectedAsset.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        when (val assetsState = cryptoAssetsState) {
-            is UiState.Success -> {
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(bottom = 16.dp)
-                ) {
-                    items(assetsState.data) { asset ->
-                        AssetChip(
-                            asset = asset,
-                            isSelected = selectedAsset?.id == asset.id,
-                            onClick = { viewModel.selectAsset(asset) }
-                        )
-                    }
-                }
-            }
-
-            is UiState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-
-            is UiState.Error -> {
-                Text(
-                    text = "Fehler: ${assetsState.message}",
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-
-            is UiState.Empty -> {
-                Text("Keine Krypto-Daten verfügbar")
-            }
-        }
-
-        selectedAsset?.let { asset ->
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = asset.name,
-                                style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = asset.symbol,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-
-                        Column(
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            Text(
-                                text = FormatUtils.formatCurrency(
-                                    asset.priceUsd.toDoubleOrNull() ?: 0.0
-                                ),
-                                style = MaterialTheme.typography.headlineSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            val changePercent = asset.changePercent24Hr.toDoubleOrNull() ?: 0.0
-                            Text(
-                                text = "${if (changePercent >= 0) "+" else ""}${
-                                    FormatUtils.formatPercentage(
-                                        changePercent / 100,
-                                        2
-                                    )
-                                }",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = if (changePercent >= 0) Color.Green else Color.Red,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    when (val historyState = cryptoHistoryState) {
-                        is UiState.Success -> {
-                            PriceChart(
-                                historyData = historyState.data,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp)
-                            )
-                        }
-
-                        is UiState.Loading -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator()
-                            }
-                        }
-
-                        is UiState.Error -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = "Fehler beim Laden der Grafik: ${historyState.message}",
-                                    color = MaterialTheme.colorScheme.error
-                                )
-                            }
-                        }
-
-                        is UiState.Empty -> {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("Keine Daten verfügbar")
-                            }
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Marktdaten",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    InfoRow(
-                        "Marktkapitalisierung",
-                        FormatUtils.formatCurrency(asset.marketCapUsd.toDoubleOrNull() ?: 0.0)
-                    )
-                    InfoRow(
-                        "Volumen (24h)",
-                        FormatUtils.formatCurrency(asset.volumeUsd24Hr.toDoubleOrNull() ?: 0.0)
-                    )
-                    InfoRow("Rang", "#${asset.rank}")
-                    asset.maxSupply?.let { maxSupply ->
-                        InfoRow(
-                            "Max. Angebot",
-                            FormatUtils.formatCurrency(maxSupply.toDoubleOrNull() ?: 0.0)
-                        )
-                    }
-                }
-            }
-        }
-    }
+    CryptoAssetsScreenContent(
+        cryptoAssetsState = cryptoAssetsState,
+        cryptoHistoryState = cryptoHistoryState,
+        selectedAsset = selectedAsset,
+        onAssetSelected = { viewModel.selectAsset(it) }
+    )
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun CryptoAssetsScreenPreview() {
+    MoneyMasterTheme(darkTheme = true) {
+        val mockAssets = listOf(
+            Asset(
+                id = "bitcoin",
+                rank = "1",
+                symbol = "BTC",
+                name = "Bitcoin",
+                supply = "19500000.0000000000000000",
+                maxSupply = "21000000.0000000000000000",
+                marketCapUsd = "1000000000000.0000000000000000",
+                volumeUsd24Hr = "20000000000.0000000000000000",
+                priceUsd = "50000.0000000000000000",
+                changePercent24Hr = "2.5000000000000000",
+                vwap24Hr = "49800.0000000000000000",
+                explorer = "https://blockchain.info/"
+            ),
+            Asset(
+                id = "ethereum",
+                rank = "2",
+                symbol = "ETH",
+                name = "Ethereum",
+                supply = "120000000.0000000000000000",
+                maxSupply = null,
+                marketCapUsd = "400000000000.0000000000000000",
+                volumeUsd24Hr = "15000000000.0000000000000000",
+                priceUsd = "3000.0000000000000000",
+                changePercent24Hr = "-1.2000000000000000",
+                vwap24Hr = "3050.0000000000000000",
+                explorer = "https://etherscan.io/"
+            )
+        )
+
+        val sampleHistoryData = listOf(
+            HistoryDataPoint(
+                priceUsd = "48000.0",
+                time = System.currentTimeMillis() - 24 * 60 * 60 * 1000,
+                date = ""
+            ),
+            HistoryDataPoint(
+                priceUsd = "49200.0",
+                time = System.currentTimeMillis() - 18 * 60 * 60 * 1000,
+                date = ""
+            ),
+            HistoryDataPoint(
+                priceUsd = "50500.0",
+                time = System.currentTimeMillis() - 12 * 60 * 60 * 1000,
+                date = ""
+            ),
+            HistoryDataPoint(
+                priceUsd = "50000.0",
+                time = System.currentTimeMillis(),
+                date = ""
+            )
+        )
+
+        CryptoAssetsScreenContent(
+            cryptoAssetsState = UiState.Success(mockAssets),
+            cryptoHistoryState = UiState.Success(sampleHistoryData),
+            selectedAsset = mockAssets.first(),
+            onAssetSelected = { }
+        )
+    }
+}
